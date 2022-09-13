@@ -92,7 +92,9 @@ public class UserControllerTest {
         mockMvc.perform(
                 post("/api/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDTO))).andExpect(status().isBadRequest());
+                        .content(objectMapper.writeValueAsString(userDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("You are underage")));
     }
 
     @Test
@@ -114,7 +116,8 @@ public class UserControllerTest {
         mockMvc.perform(
                 post("/api/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDTO))).andExpect(status().isBadRequest());
+                        .content(objectMapper.writeValueAsString(userDTO)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -136,7 +139,8 @@ public class UserControllerTest {
         mockMvc.perform(
                 put("/api/user/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDTO))).andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(userDTO)))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -165,7 +169,8 @@ public class UserControllerTest {
 
     @Test
     void shouldDeleteUser() throws Exception {
-        mockMvc.perform(delete("/api/user/1")).andExpect(status().isOk());
+        mockMvc.perform(delete("/api/user/1"))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -204,6 +209,7 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/user")
                 .param("dateFrom", String.valueOf(dateFrom))
                 .param("dateTo", String.valueOf(dateTo)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("Date 'from' is after date 'to'")));
     }
 }
